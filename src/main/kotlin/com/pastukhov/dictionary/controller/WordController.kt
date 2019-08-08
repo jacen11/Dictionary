@@ -4,6 +4,7 @@ import com.pastukhov.dictionary.model.Antonym
 import com.pastukhov.dictionary.model.Meaning
 import com.pastukhov.dictionary.model.Synonyms
 import tornadofx.*
+import kotlin.RuntimeException
 
 /**
  * Abstraction layer to perform HTTP operations
@@ -30,7 +31,7 @@ class WordController : Controller() {
         }
     }
 
-    fun getSynonyms(word: String) : Synonyms? {
+    fun getSynonyms(word: String): Synonyms? {
         val response = api.get("$word/synonyms")
         try {
             return when {
@@ -41,15 +42,17 @@ class WordController : Controller() {
             response.consume()
         }
     }
-    fun getAntonyms(word: String) : Antonym? {
-        val response = api.get("$word/antonyms")
+
+    private var responseAntonyms: Rest.Response? = null
+    fun getAntonyms(word: String): Antonym? {
         try {
-            return when {
-                response.ok() -> response.one().toModel()
-                else -> null
+            try {
+                responseAntonyms = api.get("$word/antonyms")
+            } catch (ex: RuntimeException) {
             }
+            return if (responseAntonyms?.ok() == true) responseAntonyms?.one()?.toModel() else null
         } finally {
-            response.consume()
+            responseAntonyms?.consume()
         }
     }
 }
