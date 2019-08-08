@@ -1,6 +1,9 @@
 package com.pastukhov.dictionary.view
 
 import com.pastukhov.dictionary.Constants
+import com.pastukhov.dictionary.app.Styles
+import com.pastukhov.dictionary.app.Styles.Companion.cssButton
+import com.pastukhov.dictionary.app.Styles.Companion.cssHeader
 import com.pastukhov.dictionary.app.Styles.Companion.cssRule
 import com.pastukhov.dictionary.controller.WordController
 import javafx.geometry.Orientation
@@ -38,12 +41,19 @@ class MainView : View("Dictionary") {
         addClass(cssRule)
         form {
             fieldset(labelPosition = Orientation.VERTICAL) {
-                field("Enter word", Orientation.VERTICAL) {
+                label("Enter word")
+                field {
+                    addClass(cssHeader)
+
                     inputWord = textfield()
                 }
                 buttonbar {
-                    button("Clean") { action { result.text = "" } }
+                    button("Clean") {addClass(cssButton);
+                        action { result.text = "" };
+
+                    }
                     button("Get meaning") {
+                        addClass(cssButton)
                         action {
                             if (inputWord.text.isNotBlank()) {
                                 runAsync {
@@ -65,6 +75,7 @@ class MainView : View("Dictionary") {
                         }
                     }
                     button("Get synonyms") {
+                        addClass(cssButton)
                         action {
                             if (inputWord.text.isNotBlank()) {
                                 runAsync {
@@ -85,6 +96,7 @@ class MainView : View("Dictionary") {
                         }
                     }
                     button("Get antonyms") {
+                        addClass(cssButton)
                         action {
                             if (inputWord.text.isNotBlank()) {
                                 runAsync {
