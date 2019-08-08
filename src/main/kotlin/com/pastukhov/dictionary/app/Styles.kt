@@ -1,8 +1,6 @@
 package com.pastukhov.dictionary.app
 
 import javafx.scene.paint.Color
-import javafx.scene.paint.Color.rgb
-import javafx.scene.paint.Paint
 import javafx.scene.text.FontWeight
 import tornadofx.*
 
@@ -10,12 +8,13 @@ class Styles : Stylesheet() {
     companion object {
         val cssRule by cssclass()
         val cssButton by cssclass()
-        val cssHeader by cssclass()
+        val cssField by cssclass()
     }
 
     init {
-        select(cssHeader){
+        select(cssField){
             fontWeight = FontWeight.NORMAL
+
         }
 
         select(cssRule) {
