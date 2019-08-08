@@ -6,8 +6,8 @@ import com.pastukhov.dictionary.app.Styles.Companion.cssField
 import com.pastukhov.dictionary.app.Styles.Companion.cssRule
 import com.pastukhov.dictionary.controller.WordController
 import javafx.geometry.Orientation
-import javafx.scene.control.Button
 import javafx.scene.control.Label
+import javafx.scene.control.ProgressIndicator
 import javafx.scene.control.TextField
 import tornadofx.*
 
@@ -23,6 +23,7 @@ class MainView : View("Dictionary") {
     // UI elements
     private var inputWord: TextField by singleAssign()
     private var result: Label by singleAssign()
+    private var progressIndicator: ProgressIndicator = ProgressIndicator() //by singleAssign()
 
     private var isWrongSymbols = false
 
@@ -43,18 +44,14 @@ class MainView : View("Dictionary") {
         form {
             fieldset(labelPosition = Orientation.VERTICAL) {
                 label("Enter word")
-                field {
-                    inputWord = textfield()
-                }.addClass(cssField)
-
+                field { inputWord = textfield() }.addClass(cssField)
                 buttonbar {
-
                     val validator = ValidationContext().addValidator(inputWord, inputWord.textProperty()) {
                         isWrongSymbols = inputWord.text.replace(Regex("[(\\d||\\w)]+"), "").isNotEmpty()
                         if (isWrongSymbols) error("You can use only numbers and letters of the Latin alphabet.") else null
                     }
 
-                    button("Clean") { action { result.text = "" } }.addClass(cssButton)
+                    button("Clean") { action { result.text = ""; progressIndicator.hide() } }.addClass(cssButton)
                     button("Get meaning") {
                         addClass(cssButton)
                         action {
@@ -68,8 +65,10 @@ class MainView : View("Dictionary") {
                             }
                             runAsync {
                                 // Send request to API
+                                progressIndicator.show()
                                 controller.getMeaning(inputWord.text)
                             } ui { meaning ->
+                                progressIndicator.hide()
                                 if (meaning != null) {
                                     // Show the result on the UI
 
@@ -96,9 +95,11 @@ class MainView : View("Dictionary") {
                                 return@action
                             }
                             runAsync {
+                                progressIndicator.show()
                                 // Send request to API
                                 controller.getSynonyms(inputWord.text)
                             } ui {
+                                progressIndicator.hide()
                                 if (it != null) {
                                     val synonyms = it.synonyms
                                             .joinToString(prefix = "\n")
@@ -125,9 +126,11 @@ class MainView : View("Dictionary") {
                             }
 
                             runAsync {
+                                progressIndicator.show()
                                 // Send request to API
                                 controller.getAntonyms(inputWord.text)
                             } ui {
+                                progressIndicator.hide()
                                 if (it != null) {
                                     val antonyms = it.antonyms
                                             .joinToString(prefix = "\n")
@@ -144,6 +147,7 @@ class MainView : View("Dictionary") {
                 }
             }
             result = label { }
+            progressIndicator = progressindicator { hide() }
         }
     }
 }
