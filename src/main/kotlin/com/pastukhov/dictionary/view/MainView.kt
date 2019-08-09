@@ -36,6 +36,7 @@ class MainView : View("Dictionary") {
 
     }
 
+
     /**
      * Root View
      */
@@ -46,7 +47,7 @@ class MainView : View("Dictionary") {
                 label("Enter word")
                 field { inputWord = textfield() }.addClass(cssField)
                 buttonbar {
-                    val validator = ValidationContext().addValidator(inputWord, inputWord.textProperty()) {
+                    ValidationContext().addValidator(inputWord, inputWord.textProperty()) {
                         isWrongSymbols = inputWord.text.replace(Regex("[(\\d||\\w)]+"), "").isNotEmpty()
                         if (isWrongSymbols) error("You can use only numbers and letters of the Latin alphabet.") else null
                     }
@@ -55,14 +56,21 @@ class MainView : View("Dictionary") {
                     button("Get meaning") {
                         addClass(cssButton)
                         action {
-                            if (inputWord.text.isBlank()) {
-                                result.text = "Empty request"
+                            when {
+                                inputWord.text.isBlank() -> result.text = "Empty request"
+                                isWrongSymbols -> result.text = "You can use only numbers and letters of the Latin alphabet."
+                            }
+                            if (inputWord.text.isBlank()||isWrongSymbols) {
                                 return@action
                             }
-                            if (isWrongSymbols) {
-                                result.text = "You can use only numbers and letters of the Latin alphabet."
-                                return@action
-                            }
+//                            if (inputWord.text.isBlank()) {
+//                                result.text = "Empty request"
+//                                return@action
+//                            }
+//                            if (isWrongSymbols) {
+//                                result.text = "You can use only numbers and letters of the Latin alphabet."
+//                                return@action
+//                            }
                             runAsync {
                                 // Send request to API
                                 progressIndicator.show()
@@ -129,9 +137,10 @@ class MainView : View("Dictionary") {
                                 progressIndicator.show()
                                 // Send request to API
                                 controller.getAntonyms(inputWord.text)
+                                //     controller.getModel<Antonym>(inputWord.text, Models.Antonym)
                             } ui {
                                 progressIndicator.hide()
-                                if (it != null) {
+                                if (it.isNotEmpty()) {
                                     val antonyms = it.antonyms
                                             .joinToString(prefix = "\n")
                                             .replace("\"", "")
