@@ -12,7 +12,7 @@ class Styles : Stylesheet() {
     }
 
     init {
-        select(cssField){
+        select(cssField) {
             fontWeight = FontWeight.NORMAL
 
         }
@@ -25,7 +25,7 @@ class Styles : Stylesheet() {
             borderRadius += box(20.px)
         }
 
-        select(cssButton){
+        select(cssButton) {
             backgroundColor += c(77, 102, 204)
             padding = box(0.7.em, 0.57.em)
             fontSize = 14.px

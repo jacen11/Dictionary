@@ -2,10 +2,10 @@ package com.pastukhov.dictionary.controller
 
 import com.pastukhov.dictionary.model.Antonym
 import com.pastukhov.dictionary.model.Meaning
-import com.pastukhov.dictionary.model.Models
 import com.pastukhov.dictionary.model.Synonyms
-import tornadofx.*
-import kotlin.RuntimeException
+import tornadofx.Controller
+import tornadofx.Rest
+import tornadofx.toModel
 
 /**
  * Abstraction layer to perform HTTP operations
@@ -53,9 +53,9 @@ class WordController : Controller() {
                 System.err.println("инет беда")
             }
             return if (responseAntonyms != null && (responseAntonyms?.ok() == true)) responseAntonyms?.one()?.toModel()
-                    ?: Antonym() else Antonym()
+                ?: Antonym() else Antonym()
         } finally {
-          responseAntonyms?.consume()
+            responseAntonyms?.consume()
         }
     }
 

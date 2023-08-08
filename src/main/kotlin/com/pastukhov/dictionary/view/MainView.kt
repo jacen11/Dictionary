@@ -29,7 +29,7 @@ class MainView : View("Dictionary") {
 
     init {
         // Configuring the client
-        api.baseURI = "https://wordsapiv1.p.mashape.com/words/"
+        api.baseURI = "https://wordsapiv1.p.rapidapi.com/words/"
         api.engine.requestInterceptor = {
             (it as HttpURLRequest).addHeader("X-Mashape-Key", Constants.API_KEY)
         }
@@ -58,9 +58,10 @@ class MainView : View("Dictionary") {
                         action {
                             when {
                                 inputWord.text.isBlank() -> result.text = "Empty request"
-                                isWrongSymbols -> result.text = "You can use only numbers and letters of the Latin alphabet."
+                                isWrongSymbols -> result.text =
+                                    "You can use only numbers and letters of the Latin alphabet."
                             }
-                            if (inputWord.text.isBlank()||isWrongSymbols) {
+                            if (inputWord.text.isBlank() || isWrongSymbols) {
                                 return@action
                             }
 //                            if (inputWord.text.isBlank()) {
@@ -81,8 +82,9 @@ class MainView : View("Dictionary") {
                                     // Show the result on the UI
 
                                     val meanings = meaning.definitions.joinToString(
-                                            "\n • ",
-                                            "\n • ") { it.definition }
+                                        "\n • ",
+                                        "\n • "
+                                    ) { it.definition }
                                     result.text = if (meanings.isBlank()) "Missing" else "Meaning(s): $meanings"
                                 } else {
                                     result.text = "Unable to find the meaning"
@@ -110,8 +112,8 @@ class MainView : View("Dictionary") {
                                 progressIndicator.hide()
                                 if (it != null) {
                                     val synonyms = it.synonyms
-                                            .joinToString(prefix = "\n")
-                                            .replace("\"", "")
+                                        .joinToString(prefix = "\n")
+                                        .replace("\"", "")
                                     result.text = if (synonyms.isBlank()) "Missing" else "Synonym(s): $synonyms"
                                 } else {
                                     result.text = "Unable to find the synonyms"
@@ -142,8 +144,8 @@ class MainView : View("Dictionary") {
                                 progressIndicator.hide()
                                 if (it.isNotEmpty()) {
                                     val antonyms = it.antonyms
-                                            .joinToString(prefix = "\n")
-                                            .replace("\"", "")
+                                        .joinToString(prefix = "\n")
+                                        .replace("\"", "")
                                     result.text = if (antonyms.isBlank()) "Missing" else "Antonym(s): $antonyms"
                                 } else {
                                     result.text = "Unable to find the antonyms"

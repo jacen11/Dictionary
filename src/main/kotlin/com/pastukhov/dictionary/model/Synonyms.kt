@@ -12,16 +12,16 @@ class Synonyms : JsonModel {
     var word by wordProperty
 
     val synonymsProperty = SimpleStringProperty()// ReadOnlyListWrapper<String>() // SimpleListProperty<String>()
-    var synonyms= FXCollections.observableArrayList<String>()// by synonymsProperty
+    var synonyms = FXCollections.observableArrayList<String>()// by synonymsProperty
 
     override fun updateModel(json: JsonObject) {
         with(json) {
             word = string("word")
             val jsonArray: JsonArray = getJsonArray("synonyms")
-            val arr = mutableListOf<String >()
-            jsonArray.forEach { arr.add(it.toString())}
+            val arr = mutableListOf<String>()
+            jsonArray.forEach { arr.add(it.toString()) }
             synonyms.setAll(arr)
-           // synonyms = getJsonArray("synonyms")
+            // synonyms = getJsonArray("synonyms")
 //                    .joinToString ( prefix = "\n" )
 //                    .replace("\"","")
         }
