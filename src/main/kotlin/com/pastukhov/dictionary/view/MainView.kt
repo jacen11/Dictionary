@@ -16,8 +16,6 @@ import tornadofx.*
  */
 class MainView : View("Dictionary") {
 
-    // Get the REST client
-    private val api: Rest by inject()
     private val controller: WordController by inject()
 
     // UI elements
@@ -26,16 +24,6 @@ class MainView : View("Dictionary") {
     private var progressIndicator: ProgressIndicator = ProgressIndicator() //by singleAssign()
 
     private var isWrongSymbols = false
-
-    init {
-        // Configuring the client
-        api.baseURI = "https://wordsapiv1.p.rapidapi.com/words/"
-        api.engine.requestInterceptor = {
-            (it as HttpURLRequest).addHeader("X-Mashape-Key", Constants.API_KEY)
-        }
-
-    }
-
 
     /**
      * Root View
